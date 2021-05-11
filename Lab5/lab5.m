@@ -14,8 +14,8 @@ rSquaredZ = modelZ.Rsquared
 
 clear
 data = readtable("reglab.txt")
-modelFull = fitlm([data.x1 data.x2 data.x3 data.x4],data.y);
-SSEFull = modelFull.SSE
+model1234 = fitlm([data.x1 data.x2 data.x3 data.x4],data.y);
+SSE1234 = model1234.SSE
 model123 = fitlm([data.x1 data.x2 data.x3],data.y);
 SSE123 = model123.SSE
 model124 = fitlm([data.x1 data.x2 data.x4],data.y);
@@ -68,14 +68,17 @@ resubPrediction = predict(linModel,dataTrain);
 MAE = mean(abs(resubPrediction-dataTrain.Employed))
 
 lambda = 10.^(-3+0.2.*(0:25));
-ridgeMAE = zeros(numel(lambda),1);
+ridgeMAE = zeros(numel(lambda),2);
 ridgeModels = ridge(dataTrain{:,end},dataTrain{:,1:end-1},lambda,0);
 for i = 1:numel(lambda)
     ridgePrediction = ridgeModels(1,i) + dataTest{:,1:end-1}*ridgeModels(2:end,i);
-    ridgeMAE(i) = mean(abs(ridgePrediction-dataTest.Employed));
+    ridgeMAE(i,1) = mean(abs(ridgePrediction-dataTest.Employed));
+    ridgeResubPrediction = ridgeModels(1,i) + dataTrain{:,1:end-1}*ridgeModels(2:end,i);
+    ridgeMAE(i,2) = mean(abs(ridgeResubPrediction-dataTrain.Employed));
 end
 plot(lambda,ridgeMAE)
 title("Ridge error")
+legend('Test data','Training data')
 xlabel("\lambda")
 ylabel("Mean absolute error")
 %% 
@@ -125,6 +128,8 @@ for year = 1960:1980
     end
 end
 plot(data.year(data.q == 1),[data.value(data.q == 1) data.value(data.q == 2) data.value(data.q == 3) data.value(data.q == 4)])
+legend('Q1','Q2','Q3','Q4',"Location","northwest")
+
 modelQ1 = fitlm(data.year(data.q == 1),data.value(data.q == 1));
 modelQ1.Coefficients
 modelQ2 = fitlm(data.year(data.q == 2),data.value(data.q == 2));
@@ -164,6 +169,7 @@ for i = 1:numel(epsilon)
     modelMSE(i) = mean((prediction - dataTest.Var3).^2);
 end
 plot(epsilon,modelMSE)
+legend('epsilon','MSE')
 %% 
 % Задание 9
 
