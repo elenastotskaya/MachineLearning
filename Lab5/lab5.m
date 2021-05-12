@@ -161,7 +161,7 @@ data = readtable("svmdata6.txt")
 cvpt = cvpartition(data.Var3,"HoldOut",0.3);
 dataTrain = data(training(cvpt),:);
 dataTest = data(test(cvpt),:);
-epsilon = 0.1:0.1:1;
+epsilon = 0.01:0.01:1;
 modelMSE = zeros(numel(epsilon),1);
 for i = 1:numel(epsilon)
     svmModel = fitrsvm(dataTrain,"Var3","KernelFunction","rbf","Epsilon",epsilon(i));
@@ -169,7 +169,8 @@ for i = 1:numel(epsilon)
     modelMSE(i) = mean((prediction - dataTest.Var3).^2);
 end
 plot(epsilon,modelMSE)
-legend('epsilon','MSE')
+xlabel('epsilon')
+ylabel('MSE')
 %% 
 % Задание 9
 
