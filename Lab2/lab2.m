@@ -11,7 +11,7 @@ XTest = data0_test(:,1:2);
 resultTrain = categorical(data0_train(:,3));
 resultTest = categorical(data0_test(:,3));
 layers = [featureInputLayer(2),fullyConnectedLayer(2),softmaxLayer,classificationLayer];
-options = trainingOptions('adam','MaxEpochs',50,"Plots","training-progress");
+options = trainingOptions('adam','MaxEpochs',500,"Plots","training-progress");
 net = trainNetwork(XTrain,resultTrain,layers,options);
 prediction = classify(net,XTest);
 confusionchart(resultTest,prediction)
@@ -24,8 +24,6 @@ XTrain = data1_train(:,1:2);
 XTest = data1_test(:,1:2);
 resultTrain = categorical(data1_train(:,3));
 resultTest = categorical(data1_test(:,3));
-layers = [featureInputLayer(2),fullyConnectedLayer(2),softmaxLayer,classificationLayer];
-options = trainingOptions('adam','MaxEpochs',50,"Plots","training-progress");
 net = trainNetwork(XTrain,resultTrain,layers,options);
 prediction = classify(net,XTest);
 confusionchart(resultTest,prediction)
@@ -42,7 +40,7 @@ XTest = data_test(:,1:2);
 resultTrain = categorical(data_train(:,3));
 resultTest = categorical(data_test(:,3));
 layers = [featureInputLayer(2),fullyConnectedLayer(10),reluLayer,fullyConnectedLayer(2),softmaxLayer,classificationLayer];
-options = trainingOptions('adam','MaxEpochs',50,'Plots','training-progress','Shuffle','every-epoch','InitialLearnRate',0.1);
+options = trainingOptions('adam','MaxEpochs',500,'Plots','training-progress','Shuffle','every-epoch','InitialLearnRate',0.1);
 net = trainNetwork(XTrain,resultTrain,layers,options);
 prediction = classify(net,XTest);
 confusionchart(resultTest,prediction)
